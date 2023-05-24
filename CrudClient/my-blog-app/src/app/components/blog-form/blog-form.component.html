@@ -1,0 +1,48 @@
+<h2>Create Blog</h2>
+
+<form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="blogTitle">Blog Title:</label>
+    <input type="text" id="blogTitle" formControlName="title" />
+    <div *ngIf="blogForm.controls['title'].invalid">
+      <small>Please enter a blog name.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="blogUrl">URL:</label>
+    <input type="text" id="blogUrl" formControlName="url" />
+    <div *ngIf="blogForm.controls['url'].invalid">
+      <small>Please enter a URL.</small>
+    </div>
+  </div>
+
+  <!-- <div formArrayName="posts">
+    <h3>Posts:</h3>
+    <div *ngFor="let postGroup of posts.controls; let i = index">
+      <div [formGroup]="postGroup">
+        <div>
+          <label for="postTitle{{i}}">Title:</label>
+          <input type="text" id="postTitle{{i}}" formControlName="title">
+          <div *ngIf="postGroup.controls.title.invalid">
+            <small>Please enter a title for post {{ i + 1 }}.</small>
+          </div>
+        </div>
+
+        <div>
+          <label for="postContent{{i}}">Content:</label>
+          <textarea id="postContent{{i}}" formControlName="content"></textarea>
+          <div *ngIf="postGroup.controls.content.invalid && postGroup.controls.content.touched">
+            <small>Please enter content for post {{ i + 1 }}.</small>
+          </div>
+        </div>
+
+        <button type="button" (click)="removePost(i)">Remove Post</button>
+      </div>
+    </div>
+
+    <button type="button" (click)="addPost()">Add Post</button>
+  </div> -->
+
+  <button type="submit" [disabled]="blogForm.invalid">Create</button>
+</form>
