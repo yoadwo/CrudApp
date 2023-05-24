@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "8f22c981-3d4a-47ea-922c-f86b4b7ff1b8": {
+      "ProjectGuid": "8f22c981-3d4a-47ea-922c-f86b4b7ff1b8",
+      "DisplayName": "CrudApp",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
