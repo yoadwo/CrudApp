@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  blogsBaseUrl: "https://localhost:7134/API/Blogs"
+  // blogsBaseUrl: "http://api-svc:5080/api/blogs"
+  blogsBaseUrl: "/api/blogs"
 };
 
 /*

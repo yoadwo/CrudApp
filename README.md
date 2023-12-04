@@ -21,6 +21,23 @@ In the dialog, select Blog.cs
 If anybody asks:, explain about explicit (iterate and change stage) to implicit (attach, worse performance)
 13. enable cors:  policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 
+### Containerize App
+1. Right-click on the project, Add -> Docker Support -> Linus OS
+2. Add <DockerfileTag> element to csproj such as `<docker user name>/<project name>-api`. Use dashes for spaces.
+3. Right-click on the project, Publish -> Docker Container Registry -> Docker Hub -> username, leave password empty.
+
+### Deploy App
+1. Add k8s\api-deployment.yaml. Add environment variables for the pod
+1. 1. ASPNETCORE_ENVIRONMENT=Development (or any other environment)
+1. 2. ASPNETCORE_URLS=https://+:443;http://+:80, remove the https if you don't plan to provide a certificate
+1. 3. ConnectionStrings__BloggingContext=server=xxx.freemysqlhosting.net;database=<db>;Uid=<user>;Pwd=<pwd>;
+2. Add k8s\api-service.yaml. The type doesn't matter. Port can be anything, TargetPort should be 80 (match dockerfile)
+3. Expose with `minikube service` (`tunnel` should suffice if chose NodePort\LoadBalancer)
+
+### Setup DB
+1. To create db: `Create database <db name>`; then `use <db name>`;
+2. To create tables: `CREATE TABLE Blogs (ID INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255), url VARCHAR(255), rating INT);` then `CREATE TABLE Posts (ID INT AUTO_INCREMENT PRIMARY KEY, Title VARCHAR(255), Content VARCHAR(255), BlogId INT)`
+3. You can try a k8s version as seen on link _https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/_
 
 ## client
 1. npm install -g @angular/cli or use npx
@@ -45,4 +62,17 @@ If anybody asks:, explain about explicit (iterate and change stage) to implicit 
 13. 2. Edit the app-routing module to include both form and list components
 13. 3. Would be nice to also include a Home componente
 
+### Containerize App
+There are two ways to expose the client, with as a loadbalancer service with nginx config,
+or with Ingress. The following steps describe nginx config:
+1. add nginx.conf which will redirect requests starting with /api to your backend
+2. change your baseUrl value (usually at environments.ts) to begin with /api
+3. your dockerfile should copy the nginx conf and the transpiled files to `/usr/share/nginx/html`
+4. build and push to `<docker user name>/<project name>-client`
 
+Note: the attached ingress.yaml is not in use!
+
+### Deploy your App
+1. Add k8s\client-deployment.yaml. Add environment variables for the pod
+2. Add k8s\client-service.yaml. The type doesn't matter. Port can be anything, TargetPort should be 80 (match dockerfile)
+3. Expose with `minikube service` (`tunnel` should suffice if chose NodePort\LoadBalancer)

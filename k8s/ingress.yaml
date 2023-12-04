@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-service
+  labels:
+    name: ingress-service
+  annotations:
+    nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1/
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: "/api/?(.*)"
+        backend:
+          service:
+            name: api-svc
+            port:
+              number: 5080
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: client-svc
+            port: 
+              number: 8080
